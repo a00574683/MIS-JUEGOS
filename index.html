@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mis Juegos — Tetris · Snake · Gato · Ping Pong</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="header">
+  <div class="eyebrow">Mis juegos · HTML + CSS + JS</div>
+  <h1 class="logo">Elige tu juego <span>✦</span></h1>
+  <p class="subtitle">Cuatro clásicos en un solo lugar. Toca una tarjeta para empezar a jugar.</p>
+</header>
+
+<main>
+  <!-- ============ HOME ============ -->
+  <section id="home">
+    <div class="games-grid">
+      <button class="card card-tetris" data-go="tetris">
+        <div class="card-icon">🧱</div>
+        <h2>Tetris</h2>
+        <p>Apila bloques, limpia líneas y sube de nivel.</p>
+        <span class="card-tag">1 jugador · Teclado</span>
+        <span class="play-btn">Jugar →</span>
+      </button>
+
+      <button class="card card-snake" data-go="snake">
+        <div class="card-icon">🐍</div>
+        <h2>Snake</h2>
+        <p>Come, crece y no te muerdas la cola.</p>
+        <span class="card-tag">1 jugador · Teclado</span>
+        <span class="play-btn">Jugar →</span>
+      </button>
+
+      <button class="card card-gato" data-go="gato">
+        <div class="card-icon">⭕</div>
+        <h2>Gato</h2>
+        <p>X vs O en la misma pantalla. Gana el 3 en raya.</p>
+        <span class="card-tag">2 jugadores · Local</span>
+        <span class="play-btn">Jugar →</span>
+      </button>
+
+      <button class="card card-pong" data-go="pong">
+        <div class="card-icon">🏓</div>
+        <h2>Ping Pong</h2>
+        <p>Duelo de paletas. El primero en llegar a 5 gana.</p>
+        <span class="card-tag">2 jugadores · Local</span>
+        <span class="play-btn">Jugar →</span>
+      </button>
+    </div>
+    <p class="hint">Funciona sin servidor. Solo abre este archivo en tu navegador.</p>
+  </section>
+
+  <!-- ============ TETRIS ============ -->
+  <section id="view-tetris" class="view hidden">
+    <button class="back" data-home>← Volver</button>
+    <h2 class="game-title">Tetris</h2>
+    <p class="game-sub">Apila y limpia líneas para sumar puntos.</p>
+    <div class="game-layout">
+      <canvas id="tetris-board" width="300" height="600"></canvas>
+      <div class="panel">
+        <div class="score-box"><span>Puntos</span><strong id="t-score">0</strong></div>
+        <div class="score-row">
+          <div class="score-box"><span>Líneas</span><strong id="t-lines">0</strong></div>
+          <div class="score-box"><span>Nivel</span><strong id="t-level">1</strong></div>
+        </div>
+        <div id="t-msg" class="msg">Pulsa Iniciar para jugar</div>
+        <button id="t-start" class="btn cyan">Iniciar / Reiniciar</button>
+        <button id="t-pause" class="btn ghost">Pausa</button>
+        <div class="controls-grid">
+          <button id="t-left" class="btn small">◀</button>
+          <button id="t-rotate" class="btn small">⟳</button>
+          <button id="t-right" class="btn small">▶</button>
+          <button id="t-down" class="btn small">▼</button>
+        </div>
+        <p class="keys">← → mover · ↑ rotar · ↓ bajar · Espacio caer · P pausa</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SNAKE ============ -->
+  <section id="view-snake" class="view hidden">
+    <button class="back" data-home>← Volver</button>
+    <h2 class="game-title">Snake</h2>
+    <p class="game-sub">Come los puntos y haz crecer la serpiente.</p>
+    <div class="game-layout">
+      <canvas id="snake-board" width="400" height="400"></canvas>
+      <div class="panel">
+        <div class="score-row">
+          <div class="score-box"><span>Puntos</span><strong id="s-score">0</strong></div>
+          <div class="score-box"><span>Récord</span><strong id="s-best">0</strong></div>
+        </div>
+        <div id="s-msg" class="msg">Pulsa Iniciar para jugar</div>
+        <button id="s-start" class="btn green">Iniciar / Reiniciar</button>
+        <div class="controls-grid">
+          <span></span><button id="s-up" class="btn small">▲</button><span></span>
+          <button id="s-left" class="btn small">◀</button>
+          <button id="s-down" class="btn small">▼</button>
+          <button id="s-right" class="btn small">▶</button>
+        </div>
+        <p class="keys">Flechas o WASD para mover</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GATO ============ -->
+  <section id="view-gato" class="view hidden">
+    <button class="back" data-home>← Volver</button>
+    <h2 class="game-title">Gato · 2 jugadores</h2>
+    <p class="game-sub">Juegan por turnos en la misma pantalla.</p>
+    <div class="game-layout center">
+      <div class="panel wide">
+        <div class="score-row">
+          <div class="score-box x"><span>Jugador X</span><strong id="g-score-x">0</strong></div>
+          <div class="score-box"><span>Empates</span><strong id="g-score-e">0</strong></div>
+          <div class="score-box o"><span>Jugador O</span><strong id="g-score-o">0</strong></div>
+        </div>
+        <div id="g-status" class="msg">Turno de: X</div>
+        <div id="g-board" class="gato-board">
+          <button class="gato-cell" data-i="0"></button>
+          <button class="gato-cell" data-i="1"></button>
+          <button class="gato-cell" data-i="2"></button>
+          <button class="gato-cell" data-i="3"></button>
+          <button class="gato-cell" data-i="4"></button>
+          <button class="gato-cell" data-i="5"></button>
+          <button class="gato-cell" data-i="6"></button>
+          <button class="gato-cell" data-i="7"></button>
+          <button class="gato-cell" data-i="8"></button>
+        </div>
+        <div class="btn-row">
+          <button id="g-reset" class="btn pink">Nueva ronda</button>
+          <button id="g-clear" class="btn ghost">Reiniciar marcador</button>
+        </div>
+        <p class="keys">X siempre empieza la ronda.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PONG ============ -->
+  <section id="view-pong" class="view hidden">
+    <button class="back" data-home>← Volver</button>
+    <h2 class="game-title">Ping Pong · 2 jugadores</h2>
+    <p class="game-sub">Gana quien llegue primero a 5 puntos.</p>
+    <div class="game-layout center">
+      <div class="pong-wrap">
+        <canvas id="pong-board" width="800" height="450"></canvas>
+        <div id="p-msg" class="msg">Pulsa Iniciar para jugar</div>
+        <div class="btn-row">
+          <button id="p-start" class="btn yellow">Iniciar / Reiniciar</button>
+          <button id="p-pause" class="btn ghost">Pausa</button>
+        </div>
+        <div class="pong-help">
+          <div><strong>Jugador 1 (izq):</strong> teclas <kbd>W</kbd> / <kbd>S</kbd></div>
+          <div><strong>Jugador 2 (der):</strong> teclas <kbd>▲</kbd> / <kbd>▼</kbd></div>
+        </div>
+        <div class="pong-touch">
+          <div class="touch-group">
+            <span>P1</span>
+            <button id="p1-up" class="btn small">▲</button>
+            <button id="p1-down" class="btn small">▼</button>
+          </div>
+          <div class="touch-group">
+            <span>P2</span>
+            <button id="p2-up" class="btn small">▲</button>
+            <button id="p2-down" class="btn small">▼</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>Mis Juegos · Hecho con HTML + CSS + JS © 2026</footer>
+<script src="app.js"></script>
+</body>
+</html>
